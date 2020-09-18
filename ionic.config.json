@@ -1,0 +1,7 @@
+{
+  "name": "salutem",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
