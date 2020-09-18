@@ -8,8 +8,16 @@ const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'principal',
     pathMatch: 'full'
+  },
+  {
+    path: 'principal',
+    loadChildren: () => import('./pages/principal/principal.module').then( m => m.PrincipalPageModule)
+  },
+  {
+    path: 'menu-pruebas',
+    loadChildren: () => import('./pages/menu-pruebas/menu-pruebas.module').then( m => m.MenuPruebasPageModule)
   },
 ];
 
