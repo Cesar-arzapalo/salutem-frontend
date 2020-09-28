@@ -1,3 +1,29 @@
-<p>
-  cuestionario works!
-</p>
+<div class="ion-padding" *ngIf="cuestionario!= undefined">
+    <ion-card *ngFor="let pregunta of cuestionario.preguntas" class="ion-paddin">
+        <ion-label class="ion-padding">{{pregunta.descripcion}}</ion-label>
+
+        <ion-list *ngIf="pregunta.tipoAlternativa == 1">
+            <div *ngFor="let alternativa of pregunta.alternativas">
+                <ion-item>
+                    <ion-label>{{alternativa}}</ion-label>
+                    <ion-checkbox color="primary" slot="start"></ion-checkbox>
+                </ion-item>
+            </div>
+        </ion-list>
+
+        <ion-list *ngIf="pregunta.tipoAlternativa == 2">
+            <ion-radio-group name="auto" value="tesla">
+                <div *ngFor="let alternativa of pregunta.alternativas">
+                    <ion-item>
+                        <ion-label>{{alternativa}}</ion-label>
+                        <ion-radio value="{{alternativa}}" slot="start"></ion-radio>
+                    </ion-item>
+                </div>
+
+            </ion-radio-group>
+        </ion-list>
+
+
+
+    </ion-card>
+</div>

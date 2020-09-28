@@ -1,7 +1,7 @@
 export class PreguntaModel {
 
-    constructor(public descrpcion: string, public alternativas: string[],
-                public tipoAlteranativa: number, tipoVariable: string,
+    constructor(public descripcion: string, public alternativas: string[],
+                public tipoAlternativa: number, public tipoVariable: string,
                 public nroPagina: number, public id: string) {
 
     }
