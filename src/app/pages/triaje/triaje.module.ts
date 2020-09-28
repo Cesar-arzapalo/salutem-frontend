@@ -4,19 +4,19 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { SintomasPageRoutingModule } from './sintomas-routing.module';
+import { TriajePageRoutingModule } from './triaje-routing.module';
 
-import { SintomasPage } from './sintomas.page';
-import { ComponentsModule } from '../../../components/components.module';
+import { TriajePage } from './triaje.page';
+import { ComponentsModule } from 'src/app/components/components.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    SintomasPageRoutingModule,
+    TriajePageRoutingModule,
     ComponentsModule
   ],
-  declarations: [SintomasPage]
+  declarations: [TriajePage]
 })
-export class SintomasPageModule {}
+export class TriajePageModule {}

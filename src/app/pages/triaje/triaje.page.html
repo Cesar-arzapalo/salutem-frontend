@@ -1,0 +1,10 @@
+<app-header titulo="triaje" pathFather="/principal/pruebas"></app-header>
+
+<ion-content>
+
+    <app-cuestionario *ngIf="nivelCuestionario === 1"></app-cuestionario>
+    <app-cuestionario *ngIf="nivelCuestionario === 2"></app-cuestionario>
+    <app-cuestionario *ngIf="nivelCuestionario === 3"></app-cuestionario>
+    <app-cuestionario *ngIf="nivelCuestionario === 4"></app-cuestionario>
+    <app-cuestionario *ngIf="nivelCuestionario === 5"></app-cuestionario>
+</ion-content>

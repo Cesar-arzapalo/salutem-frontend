@@ -2,10 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  },
+
   {
     path: '',
     redirectTo: 'principal',
@@ -16,8 +13,8 @@ const routes: Routes = [
     loadChildren: () => import('./pages/principal/principal.module').then( m => m.PrincipalPageModule)
   },
   {
-    path: 'menu-pruebas',
-    loadChildren: () => import('./pages/menu-pruebas/menu-pruebas.module').then( m => m.MenuPruebasPageModule)
+    path: 'triaje',
+    loadChildren: () => import('./pages/triaje/triaje.module').then( m => m.TriajePageModule)
   },
 ];
 

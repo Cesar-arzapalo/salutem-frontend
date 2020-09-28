@@ -1,7 +1,8 @@
-export class Pregunta {
+export class PreguntaModel {
 
-    constructor(public pregunta: string, public alternativas: string[],
-                public tipoAlteranativa: string) {
+    constructor(public descrpcion: string, public alternativas: string[],
+                public tipoAlteranativa: number, tipoVariable: string,
+                public nroPagina: number, public id: string) {
 
     }
 
