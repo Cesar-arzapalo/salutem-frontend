@@ -157,9 +157,6 @@ export class CuestionarioComponent implements OnInit {
 
     this.analizarCuestionario.emit( new AnalisisCuestionarioModel(this.triaje, this.paginaActual));
 
-    if (this.paginaActual === this.cantidadCuestionarios){
-      this.router.navigateByUrl('/principal/pruebas');
-    }
   }
 
   private realizarCalculoCuestionario(){

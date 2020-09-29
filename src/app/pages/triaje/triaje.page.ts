@@ -4,6 +4,7 @@ import { PreguntaModel } from '../../models/pregunta.model';
 import { CuestionarioModel } from '../../models/cuestionario.model';
 import { AnalisisCuestionarioModel } from '../../models/AnalizasCuestionario.model';
 import { XFuzzyService } from '../../services/xfuzzy.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-triaje',
@@ -19,11 +20,14 @@ export class TriajePage implements OnInit {
   cantidadCuestionarios: number;
 
   triaje: AnalisisCuestionarioModel[];
+  
+  limite: number[];
 
   loading: boolean;
 
 
-  constructor(private preguntaServices: PreguntasService, private xFuzzyService: XFuzzyService) {
+  constructor(private preguntaServices: PreguntasService, private xFuzzyService: XFuzzyService,
+              private router: Router) {
     this.inicializarDatos();
   }
 
@@ -38,6 +42,7 @@ export class TriajePage implements OnInit {
       new AnalisisCuestionarioModel([0, 0, 0, 0], 4),
       new AnalisisCuestionarioModel([0, 0, 0, 0], 5)
     ];
+    this.limite = [45, 60, 90, 150, 240];
   }
 
   ngOnInit() {
@@ -76,7 +81,12 @@ export class TriajePage implements OnInit {
     console.log(datosTriajeXCuestionario);
     this.triaje[(datosTriajeXCuestionario.nroPagina - 1)] = datosTriajeXCuestionario;
     this.analizarTriaje(datosTriajeXCuestionario.nroPagina)
-      .subscribe(resp => console.log(resp));
+      .subscribe(resp => {
+        if (datosTriajeXCuestionario.nroPagina === 5){
+          console.log(resp);
+          this.router.navigateByUrl(`/resultado/${resp}`);
+        }
+      });
   }
 
   private analizarTriaje(nroPagina: number){

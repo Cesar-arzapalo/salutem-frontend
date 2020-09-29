@@ -16,6 +16,10 @@ const routes: Routes = [
     path: 'triaje',
     loadChildren: () => import('./pages/triaje/triaje.module').then( m => m.TriajePageModule)
   },
+  {
+    path: 'resultado/:id',
+    loadChildren: () => import('./pages/resultado/resultado.module').then( m => m.ResultadoPageModule)
+  },
 ];
 
 @NgModule({
