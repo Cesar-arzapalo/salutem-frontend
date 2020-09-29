@@ -14,7 +14,7 @@
                 <ion-radio-group [formControl]="cuestionarioFomr.controls[nombreControles[idx][0]]" name="alternativas" [value]="false">
                     <ion-item *ngFor="let alternativa of pregunta.alternativas; let aIdx= index">
                         <ion-label class="alternativas">{{alternativa}}</ion-label>
-                        <ion-radio [value]=alternativa slot="start"></ion-radio>
+                        <ion-radio [value]=aIdx slot="start"></ion-radio>
                     </ion-item>
                 </ion-radio-group>
             </ion-list>

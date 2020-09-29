@@ -42,8 +42,6 @@ export class PreguntasService {
         Object.keys(preguntasObject).forEach( key =>
           preguntas.push( this.generarPregunta(preguntasObject[key])));
     }
-    console.log(preguntas);
-
     return preguntas;
   }
 
@@ -56,8 +54,6 @@ export class PreguntasService {
     if (preguntaObject.pesoAlternativas !== []){
       pregunta.pesoAlternativas = preguntaObject.pesoAlternativas;
     }
-
-    console.log(preguntaObject.peso);
     if (preguntaObject.peso !== undefined){
       pregunta.peso = preguntaObject.peso;
     }

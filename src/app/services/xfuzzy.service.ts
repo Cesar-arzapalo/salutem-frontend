@@ -15,7 +15,7 @@ export class XFuzzyService {
 
 
   public analizarTriaje =
-    (cantidad: number, gravedad: number, contacto: number, riesgo: number): any =>
+    (cantidad: number, gravedad: number, contacto: number, riesgo: number) =>
       this.http.get(`${URL}/xFuzzy?cantidad=${cantidad}&gravedad=${gravedad}&contacto=${contacto}&riesgo=${riesgo}`)
                 .pipe(map( (resp: number) => resp))
 }

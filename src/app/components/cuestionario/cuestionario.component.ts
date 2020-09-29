@@ -60,7 +60,6 @@ export class CuestionarioComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.cuestionario);
     this.definirColumnasXPagina();
 
     this.crearFormulario();
@@ -84,28 +83,25 @@ export class CuestionarioComponent implements OnInit {
 
       if (pregunta.tipoAlternativa === 2){
         this.nombreGrupos.push(`no-posee`);
-        nombres.push(`pregunta ${i} - radio`);
-        this.cuestionarioFomr.addControl(`pregunta ${i} - radio`, new FormControl([Validators.requiredTrue]));
+        nombres.push(`pregunta ${i}`);
+        this.cuestionarioFomr.addControl(`pregunta ${i}`, new FormControl([Validators.requiredTrue]));
 
       }else{
         fromPregunta = new FormGroup({});
-        this.nombreGrupos.push(`pregunta ${i} - check`);
+        this.nombreGrupos.push(`pregunta ${i}`);
         for (let j = 1; j <= cantidadAlternativas; j += 1){
-          const nombre = `pregunta ${i} - alternativa ${j} - check`;
+          const nombre = `pregunta ${i} - alternativa ${j}`;
           fromPregunta.addControl(nombre, new FormControl());
           nombres.push(nombre);
         }
 
-        this.cuestionarioFomr.addControl(`pregunta ${i} - check`, fromPregunta);
+        this.cuestionarioFomr.addControl(`pregunta ${i}`, fromPregunta);
       }
       this.nombreControles.push(nombres);
     }
-
-    console.log(this.paginaActual);
   }
 
   crearListener(){
-    console.log(this.cuestionarioFomr);
     this.cuestionarioFomr.valueChanges.subscribe((valor) => {
       console.log(this.cuestionarioFomr);
       console.log(valor);
@@ -153,7 +149,11 @@ export class CuestionarioComponent implements OnInit {
     }
     console.log(this.cuestionario);
 
+    console.log(this.triaje);
+
     this.realizarCalculoCuestionario();
+
+    console.log(this.triaje);
 
     this.analizarCuestionario.emit( new AnalisisCuestionarioModel(this.triaje, this.paginaActual));
 
@@ -164,14 +164,52 @@ export class CuestionarioComponent implements OnInit {
 
   private realizarCalculoCuestionario(){
     const valoresCuestionario: object = this.cuestionarioFomr.value;
+    console.log(valoresCuestionario);
+    let index = 0;
+    this.triaje = [0, 0, 0, 0];
 
     for (const pregunta of this.cuestionario.preguntas){
-      switch(pregunta.tipoAlternativa){
+      const tipoVariable: string = pregunta.tipoVariable;
+      const puntaje: number =
+        (pregunta.peso !== undefined) ? pregunta.peso : pregunta.pesoAlternativas[valoresCuestionario[`pregunta ${index + 1}`]];
 
-      }
+      if (pregunta.tipoAlternativa === 2){
+        this.procesarAlternativa(tipoVariable, puntaje);
+      } else {
+
+        // tslint:disable-next-line: prefer-for-of
+        for (let i = 0; i < pregunta.alternativas.length ; i += 1){
+          const valor = valoresCuestionario[`pregunta ${index + 1}`][`pregunta ${index + 1} - alternativa ${i + 1}`];
+
+          if ( valor !== null && valor !== false ){
+            this.procesarAlternativa(tipoVariable, puntaje);
+          }
+          }
+        }
+      index += 1;
     }
 
+    }
+    private procesarAlternativa = (tipoVariable: string, puntaje: number) => {
+      switch (tipoVariable){
+        case 'sintoma': {
+          this.triaje[0] += 1;
+          this.triaje[1] += puntaje ;
+          break;
+        }
+        case 'contacto': {
+          this.triaje[2] += puntaje;
+          break;
+        }
+        case 'riesgo': {
+          this.triaje[3] += puntaje;
+          break;
+        }
+      }
+
+    }
 
   }
 
-}
+
+

@@ -6,7 +6,6 @@
             <ion-col size="12">
 
                 <app-cuestionario *ngFor="let cuestionario of cuestionarios; " [cuestionario]="cuestionario" [paginaActual]="paginaActual" [cantidadCuestionarios]="cantidadCuestionarios" (numeroCambiado)="actualizarPagina($event)" (analizarCuestionario)="realizarTriaje($event)"></app-cuestionario>
-
             </ion-col>
         </ion-row>
     </ion-grid>

@@ -73,24 +73,40 @@ export class TriajePage implements OnInit {
   }
 
   realizarTriaje(datosTriajeXCuestionario: AnalisisCuestionarioModel){
+    console.log(datosTriajeXCuestionario);
     this.triaje[(datosTriajeXCuestionario.nroPagina - 1)] = datosTriajeXCuestionario;
-    const resultado =  this.analizarTriaje(datosTriajeXCuestionario.nroPagina);
-    console.log(resultado);
+    this.analizarTriaje(datosTriajeXCuestionario.nroPagina)
+      .subscribe(resp => console.log(resp));
   }
 
   private analizarTriaje(nroPagina: number){
-    let cantidad: number;
-    let gravedad: number;
-    let contacto: number;
-    let riesgo: number;
-
+    let cantidad = 0;
+    let gravedad = 0;
+    let contacto = 0;
+    let riesgo = 0;
     for (let i = 0; i < nroPagina; i += 1){
-      cantidad = this.triaje[i][0];
-      gravedad = this.triaje[i][1];
-      contacto = this.triaje[i][2];
-      riesgo = this.triaje[i][3];
+      cantidad += this.triaje[i].datosTriaje[0];
+      gravedad += this.triaje[i].datosTriaje[1];
+      contacto += this.triaje[i].datosTriaje[2];
+      riesgo += this.triaje[i].datosTriaje[3];
+    }
+    if (cantidad > 6){
+      cantidad = 6;
     }
 
+    if (gravedad > 20) {
+      gravedad = 20;
+    }
+
+    if (contacto > 1) {
+      contacto = 1;
+    }
+
+    if (riesgo > 8){
+      riesgo = 8;
+    }
+
+    console.log(cantidad, gravedad, contacto, riesgo);
     return this.xFuzzyService.analizarTriaje(cantidad, gravedad, contacto, riesgo);
   }
 
