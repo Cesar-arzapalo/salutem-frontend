@@ -1,8 +1,13 @@
 <app-header titulo="triaje" pathFather="/principal/pruebas"></app-header>
-{{loading}}
+
 <ion-content *ngIf="!loading">
+    <ion-grid>
+        <ion-row>
+            <ion-col size="12">
 
-    <app-cuestionario [cuestionario]="cuestionario" *ngFor="let cuestionario of cuestionarios">
-    </app-cuestionario>
+                <app-cuestionario *ngFor="let cuestionario of cuestionarios; " [cuestionario]="cuestionario" [paginaActual]="paginaActual" [cantidadCuestionarios]="cantidadCuestionarios" (numeroCambiado)="actualizarPagina($event)"></app-cuestionario>
 
+            </ion-col>
+        </ion-row>
+    </ion-grid>
 </ion-content>

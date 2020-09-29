@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { PreguntasService } from '../../services/preguntas.service';
 import { PreguntaModel } from '../../models/pregunta.model';
 import { CuestionarioModel } from '../../models/cuestionario.model';
@@ -13,14 +13,18 @@ export class TriajePage implements OnInit {
   preguntas: PreguntaModel[];
   cuestionarios: CuestionarioModel[];
 
-  nivelCuestionario: number;
-
+  paginaActual: number;
   cantidadCuestionarios: number;
 
   loading: boolean;
 
+
   constructor(private preguntaServices: PreguntasService) {
-    this.nivelCuestionario = 1;
+    this.inicializarDatos();
+  }
+
+  inicializarDatos = () => {
+    this.paginaActual = 1;
     this.cantidadCuestionarios = 5;
     this.loading = true;
   }
@@ -45,12 +49,16 @@ export class TriajePage implements OnInit {
         completados.push(false);
       }
 
-      cuestionarios.push(new CuestionarioModel(pregungtasXCuestionario , completados, 0));
+      cuestionarios.push(new CuestionarioModel(pregungtasXCuestionario , completados, 0, i));
     }
 
     this.loading = false;
 
     return cuestionarios;
+  }
+
+  actualizarPagina(nuevaPagina: number){
+    this.paginaActual = nuevaPagina;
   }
 
 }

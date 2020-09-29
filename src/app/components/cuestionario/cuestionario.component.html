@@ -1,29 +1,46 @@
-<div class="ion-padding" *ngIf="cuestionario!= undefined">
-    <ion-card *ngFor="let pregunta of cuestionario.preguntas" class="ion-paddin">
-        <ion-label class="ion-padding">{{pregunta.descripcion}}</ion-label>
-
-        <ion-list *ngIf="pregunta.tipoAlternativa == 1">
-            <div *ngFor="let alternativa of pregunta.alternativas">
-                <ion-item>
-                    <ion-label>{{alternativa}}</ion-label>
-                    <ion-checkbox color="primary" slot="start"></ion-checkbox>
+<form [formGroup]="cuestionarioFomr" (ngSubmit)="analizar()">
+    <ion-card *ngFor=" let pregunta of cuestionario.preguntas; let idx=index ">
+        <div *ngIf="!loading && paginaActual == pregunta.nroPagina;">
+            <ion-card-header color="primary ">
+                <ion-card-subtitle class="descripcion ">{{idx+1}}. {{pregunta.descripcion}}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-list *ngIf="pregunta.tipoAlternativa==1" [formGroupName]="nombreGrupos[idx]">
+                <ion-item *ngFor="let alternativa of pregunta.alternativas; let aIdx = index ">
+                    <ion-label class="alternativas">{{alternativa}}</ion-label>
+                    <ion-checkbox [value]=false class="form-control" [formControlName]="nombreControles[idx][aIdx]" color="primary" slot="start" checked></ion-checkbox>
                 </ion-item>
-            </div>
-        </ion-list>
-
-        <ion-list *ngIf="pregunta.tipoAlternativa == 2">
-            <ion-radio-group name="auto" value="tesla">
-                <div *ngFor="let alternativa of pregunta.alternativas">
-                    <ion-item>
-                        <ion-label>{{alternativa}}</ion-label>
-                        <ion-radio value="{{alternativa}}" slot="start"></ion-radio>
+            </ion-list>
+            <ion-list *ngIf="pregunta.tipoAlternativa==2">
+                <ion-radio-group [formControl]="cuestionarioFomr.controls[nombreControles[idx][0]]" name="alternativas" [value]="false">
+                    <ion-item *ngFor="let alternativa of pregunta.alternativas; let aIdx= index">
+                        <ion-label class="alternativas">{{alternativa}}</ion-label>
+                        <ion-radio [value]=alternativa slot="start"></ion-radio>
                     </ion-item>
-                </div>
-
-            </ion-radio-group>
-        </ion-list>
-
-
-
+                </ion-radio-group>
+            </ion-list>
+        </div>
     </ion-card>
-</div>
+    <ion-footer *ngIf="paginaActual == cuestionario.nroPaginaAsignada">
+        <ion-toolbar color="ion-background-color">
+            <ion-grid>
+                <ion-row class="ion-text-center">
+                    <ion-col *ngIf="paginaActual!=1" [size]="colVolver">
+                        <ion-button (click)="rergesarCuestionario()" color="primary" fill="solid" shape="round">
+                            Volver
+                        </ion-button>
+                    </ion-col>
+                    <ion-col *ngIf="paginaActual!=cantidadCuestionarios" [size]="colSiguiente">
+                        <ion-button (click)="pasarCuestionario()" color="primary" fill="solid" shape="round" [disabled]="!cuestionarioFomr.valid">
+                            Siguiente
+                        </ion-button>
+                    </ion-col>
+                    <ion-col *ngIf="paginaActual==cantidadCuestionarios" [size]="colFinalizar">
+                        <ion-button type="submit" (click)="finalizarCuestionario()" color="success" fill="solid" shape="round" [disabled]="!cuestionarioFomr.valid">
+                            Finalizar
+                        </ion-button>
+                    </ion-col>
+                </ion-row>
+            </ion-grid>
+        </ion-toolbar>
+    </ion-footer>
+</form>

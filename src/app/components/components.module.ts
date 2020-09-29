@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from './header/header.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { CuestionarioComponent } from './cuestionario/cuestionario.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 
 
@@ -11,7 +12,9 @@ import { CuestionarioComponent } from './cuestionario/cuestionario.component';
   declarations: [HeaderComponent, ProgressBarComponent, CuestionarioComponent],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    ReactiveFormsModule,
+    FormsModule
   ],
   exports: [HeaderComponent, ProgressBarComponent, CuestionarioComponent]
 })
