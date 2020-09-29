@@ -103,9 +103,8 @@ export class CuestionarioComponent implements OnInit {
 
   pasarCuestionario(){
     console.log(this.paginaActual);
-    console.log(this.colSiguiente,this.colVolver );
+    console.log(this.colSiguiente, this.colVolver );
     if (this.paginaActual === 1){
-      
       this.colSiguiente = 6;
       this.colVolver = 6;
     }else if (this.paginaActual === 4) {
