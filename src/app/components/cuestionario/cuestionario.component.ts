@@ -2,18 +2,23 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { CuestionarioModel } from '../../models/cuestionario.model';
 import { Router } from '@angular/router';
+import { XFuzzyService } from '../../services/xfuzzy.service';
+import { AnalisisCuestionarioModel } from '../../models/AnalizasCuestionario.model';
+import { PreguntaModel } from '../../models/pregunta.model';
 
 @Component({
   selector: 'app-cuestionario',
   templateUrl: './cuestionario.component.html',
   styleUrls: ['./cuestionario.component.scss'],
 })
+
 export class CuestionarioComponent implements OnInit {
 
   @Input() cuestionario: CuestionarioModel;
   @Input() cantidadCuestionarios: number;
   @Input() paginaActual: number;
   @Output() numeroCambiado: EventEmitter<number>;
+  @Output() analizarCuestionario: EventEmitter<AnalisisCuestionarioModel>;
   cuestionarioFomr: FormGroup;
 
   nombreControles: string[][];
@@ -25,19 +30,39 @@ export class CuestionarioComponent implements OnInit {
   colSiguiente: number;
   colVolver: number;
 
-  constructor(private router: Router) {
+  triaje: number[];  // pos 0: cantidad, pos 1: gravedad, pos 2: contacto, pos 3: riesgo
+
+  constructor(private router: Router, private xFuzzyService: XFuzzyService) {
     this.nombreControles = [];
     this.nombreGrupos = [];
     this.loading = true;
-    this.colSiguiente = 12;
-    this.colFinalizar = 0;
-    this.colVolver = 0;
     this.paginaActual = 1;
     this.numeroCambiado = new EventEmitter();
+    this.analizarCuestionario = new EventEmitter();
     this.cuestionarioFomr = new FormGroup({});
+    this.triaje = [0, 0, 0, 0];
+  }
+
+  definirColumnasXPagina = () => {
+    if (this.cuestionario.nroPaginaAsignada === 1){
+      this.colSiguiente = 12;
+      this.colFinalizar = 0;
+      this.colVolver = 0;
+    }else if (this.cuestionario.nroPaginaAsignada === 5){
+      this.colSiguiente = 0;
+      this.colFinalizar = 6;
+      this.colVolver = 6;
+    }else{
+      this.colSiguiente = 6;
+      this.colFinalizar = 0;
+      this.colVolver = 6;
+    }
   }
 
   ngOnInit() {
+    console.log(this.cuestionario);
+    this.definirColumnasXPagina();
+
     this.crearFormulario();
     this.crearListener();
 
@@ -102,34 +127,18 @@ export class CuestionarioComponent implements OnInit {
   }
 
   pasarCuestionario(){
-    console.log(this.paginaActual);
-    console.log(this.colSiguiente, this.colVolver );
-    if (this.paginaActual === 1){
-      this.colSiguiente = 6;
-      this.colVolver = 6;
-    }else if (this.paginaActual === 4) {
-      this.colSiguiente = 0;
-      this.colFinalizar = 6;
-      this.colVolver = 6;
-    }
-    console.log(this.colSiguiente, this.colVolver );
+
+    this.analizar();
 
     this.paginaActual += 1;
-    this.analizar();
+
     this.numeroCambiado.emit(this.paginaActual);
   }
 
   rergesarCuestionario(){
-    console.log(this.paginaActual);
-    if (this.paginaActual === 2){
-      this.colSiguiente = 12;
-      this.colVolver = 0;
-    }else if (this.paginaActual === 5) {
-      this.colSiguiente = 0;
-      this.colVolver = 6;
-      this.colFinalizar = 6;
-    }
+
     this.paginaActual -= 1;
+
     this.numeroCambiado.emit(this.paginaActual);
   }
 
@@ -137,16 +146,32 @@ export class CuestionarioComponent implements OnInit {
     this.analizar();
   }
 
-  analizar(){
-    // if (cuestionarioFomr.invalid){
-    //   //this.controlaMarkTouch(cuestionarioFomr);
-    //   return;
-    // }
+  analizar(): boolean {
+    if (this.cuestionarioFomr.invalid){
+      this.controlaMarkTouch(this.cuestionarioFomr);
+      return false;
+    }
     console.log(this.cuestionario);
+
+    this.realizarCalculoCuestionario();
+
+    this.analizarCuestionario.emit( new AnalisisCuestionarioModel(this.triaje, this.paginaActual));
 
     if (this.paginaActual === this.cantidadCuestionarios){
       this.router.navigateByUrl('/principal/pruebas');
     }
+  }
+
+  private realizarCalculoCuestionario(){
+    const valoresCuestionario: object = this.cuestionarioFomr.value;
+
+    for (const pregunta of this.cuestionario.preguntas){
+      switch(pregunta.tipoAlternativa){
+
+      }
+    }
+
+
   }
 
 }

@@ -4,54 +4,18 @@ import { PreguntaModel } from '../models/pregunta.model';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 
-const URL = environment.url;
+const URL = environment.urlXFuzzy;
 
 @Injectable({
   providedIn: 'root'
 })
-export class PreguntasService {
+export class XFuzzyService {
 
   constructor(private http: HttpClient) { }
 
 
-  getPregunta = (id: string): any =>
-                  this.http.get(`${URL}/preguntas?id=${id}`)
-                    .pipe(map( (resp: any) => this.generarPregunta(resp.mensaje)))
-
-
-  getPreguntas = () => this.http.get(`${URL}/preguntas`)
-                        .pipe(map( this.generarArregloPregunta))
-
-  setPregunta(id: string){
-
-  }
-
-  crearPregunta(pregunta: PreguntaModel){
-
-  }
-
-  eliminarPregunta(id: string){
-
-  }
-
-  private generarArregloPregunta = (object: any)  =>   {
-    const preguntas: PreguntaModel[] = [];
-    const preguntasObject = object.mensaje;
-
-    if (preguntasObject !== null) {
-        Object.keys(preguntasObject).forEach( key =>
-          preguntas.push( this.generarPregunta(preguntasObject[key])));
-    }
-    console.log(preguntas);
-
-    return preguntas;
-  }
-
-  private generarPregunta = (preguntaObject: any): PreguntaModel =>
-          new PreguntaModel(preguntaObject.descripcion, preguntaObject.alternativas,
-                            preguntaObject.tipoAlternativa, preguntaObject.tipoVariable,
-                            preguntaObject.nroPagina, preguntaObject._id)
-
-
-
+  public analizarTriaje =
+    (cantidad: number, gravedad: number, contacto: number, riesgo: number): any =>
+      this.http.get(`${URL}/xFuzzy?cantidad=${cantidad}&gravedad=${gravedad}&contacto=${contacto}&riesgo=${riesgo}`)
+                .pipe(map( (resp: number) => resp))
 }

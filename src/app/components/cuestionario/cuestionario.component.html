@@ -35,7 +35,7 @@
                         </ion-button>
                     </ion-col>
                     <ion-col *ngIf="paginaActual==cantidadCuestionarios" [size]="colFinalizar">
-                        <ion-button type="submit" (click)="finalizarCuestionario()" color="success" fill="solid" shape="round" [disabled]="!cuestionarioFomr.valid">
+                        <ion-button (click)="finalizarCuestionario()" color="success" fill="solid" shape="round" [disabled]="!cuestionarioFomr.valid">
                             Finalizar
                         </ion-button>
                     </ion-col>

@@ -4,7 +4,7 @@ import { PreguntaModel } from '../models/pregunta.model';
 import { environment } from '../../environments/environment';
 import { map } from 'rxjs/operators';
 
-const URL = environment.url;
+const URL = environment.urlMongoDB;
 
 @Injectable({
   providedIn: 'root'
@@ -47,10 +47,23 @@ export class PreguntasService {
     return preguntas;
   }
 
-  private generarPregunta = (preguntaObject: any): PreguntaModel =>
-          new PreguntaModel(preguntaObject.descripcion, preguntaObject.alternativas,
+  private generarPregunta = (preguntaObject: any): PreguntaModel => {
+    const pregunta =
+      new PreguntaModel(preguntaObject.descripcion, preguntaObject.alternativas,
                             preguntaObject.tipoAlternativa, preguntaObject.tipoVariable,
-                            preguntaObject.nroPagina, preguntaObject._id)
+                            preguntaObject.nroPagina, preguntaObject._id);
+
+    if (preguntaObject.pesoAlternativas !== []){
+      pregunta.pesoAlternativas = preguntaObject.pesoAlternativas;
+    }
+
+    console.log(preguntaObject.peso);
+    if (preguntaObject.peso !== undefined){
+      pregunta.peso = preguntaObject.peso;
+    }
+
+    return pregunta;
+  }
 
 
 

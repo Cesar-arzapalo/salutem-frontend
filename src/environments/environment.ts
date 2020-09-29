@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  url: 'http://localhost:3000'
+  urlMongoDB: 'http://localhost:3000',
+  urlXFuzzy: 'http://localhost:2800'
 };
 
 /*
