@@ -28,6 +28,7 @@ export class TriajePage implements OnInit {
 
   constructor(private preguntaServices: PreguntasService, private xFuzzyService: XFuzzyService,
               private router: Router) {
+    console.log(1212);
     this.inicializarDatos();
   }
 
@@ -80,8 +81,7 @@ export class TriajePage implements OnInit {
   realizarTriaje(datosTriajeXCuestionario: AnalisisCuestionarioModel){
     console.log(datosTriajeXCuestionario);
     this.triaje[(datosTriajeXCuestionario.nroPagina - 1)] = datosTriajeXCuestionario;
-    this.analizarTriaje(datosTriajeXCuestionario.nroPagina)
-      .subscribe(resp => {
+    this.analizarTriaje(datosTriajeXCuestionario.nroPagina).subscribe(resp => {
         if (datosTriajeXCuestionario.nroPagina === 5){
           console.log(resp);
           this.router.navigateByUrl(`/resultado/${resp}`);
