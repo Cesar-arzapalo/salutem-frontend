@@ -30,12 +30,12 @@
                         </ion-button>
                     </ion-col>
                     <ion-col *ngIf="paginaActual!=cantidadCuestionarios" [size]="colSiguiente">
-                        <ion-button (click)="pasarCuestionario()" color="primary" fill="solid" shape="round" [disabled]="!cuestionarioFomr.valid">
+                        <ion-button (click)="pasarCuestionario()" color="primary" fill="solid" shape="round" [disabled]="!cuestionarioValido">
                             Siguiente
                         </ion-button>
                     </ion-col>
                     <ion-col *ngIf="paginaActual==cantidadCuestionarios" [size]="colFinalizar">
-                        <ion-button (click)="finalizarCuestionario()" color="success" fill="solid" shape="round" [disabled]="!cuestionarioFomr.valid">
+                        <ion-button (click)="finalizarCuestionario()" color="success" fill="solid" shape="round" [disabled]="!cuestionarioValido">
                             Finalizar
                         </ion-button>
                     </ion-col>

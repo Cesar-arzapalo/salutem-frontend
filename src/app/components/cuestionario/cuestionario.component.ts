@@ -26,9 +26,14 @@ export class CuestionarioComponent implements OnInit {
 
   loading: boolean;
 
+  cuestionarioValido: boolean;
+
   colFinalizar: number;
   colSiguiente: number;
   colVolver: number;
+
+  preguntasValidas:boolean[];
+  valorCuestionario:any;
 
   triaje: number[];  // pos 0: cantidad, pos 1: gravedad, pos 2: contacto, pos 3: riesgo
 
@@ -41,6 +46,9 @@ export class CuestionarioComponent implements OnInit {
     this.analizarCuestionario = new EventEmitter();
     this.cuestionarioFomr = new FormGroup({});
     this.triaje = [0, 0, 0, 0];
+    this.cuestionarioValido = false;
+    this.preguntasValidas=[];
+    this.valorCuestionario = new Object();
   }
 
   definirColumnasXPagina = () => {
@@ -63,6 +71,7 @@ export class CuestionarioComponent implements OnInit {
     this.definirColumnasXPagina();
 
     this.crearFormulario();
+    this.revizarValidesCuestionario(this.cuestionarioFomr.value);
     this.crearListener();
 
     this.loading = false;
@@ -101,10 +110,17 @@ export class CuestionarioComponent implements OnInit {
     }
   }
 
+  revizarValidesCuestionario(valor: any){
+    console.log(this.cuestionarioFomr);
+      this.valorCuestionario=valor;
+      this.validarCuestionario();
+      console.log(`valor del cuestionario: ${this.cuestionarioValido}`)
+  }
+
   crearListener(){
     this.cuestionarioFomr.valueChanges.subscribe((valor) => {
-      console.log(this.cuestionarioFomr);
       console.log(valor);
+      this.revizarValidesCuestionario(valor);
     });
     this.cuestionarioFomr.statusChanges.subscribe((status) => {
       console.log({status});
@@ -152,6 +168,7 @@ export class CuestionarioComponent implements OnInit {
     console.log(this.triaje);
 
     this.realizarCalculoCuestionario();
+    this.validarCuestionario;
 
     console.log(this.triaje);
 
@@ -204,6 +221,62 @@ export class CuestionarioComponent implements OnInit {
         }
       }
 
+    }
+
+    
+    public validarCuestionario = () => {
+      this.realizarCalculoCuestionario();
+      this.preguntasValidadas();
+      this.cuestionarioValido = !this.componenteNaN() && this.preguntasValidadas();
+    }
+
+    private componenteNaN = ():boolean  => {
+      var nan: boolean = false;
+      this.triaje.forEach(element => {
+        if ( nan!== true && element.toString()==="NaN") {nan = true; console.log(element,1);}
+      });
+      return nan;
+    }
+
+    private preguntasValidadas = (): boolean => {
+      var preguntaValida: boolean = true;
+
+      this.registrarValidesPreguntas();
+
+      this.preguntasValidas.forEach(element => {
+        if ( preguntaValida!== false ) {preguntaValida = element;}
+      });
+      return preguntaValida;
+    }
+
+    private registrarValidesPreguntas = ():void =>{
+
+      var index = 0;
+      this.preguntasValidas = [];
+      for (const preguntaM of this.cuestionario.preguntas){
+        var valorValido: boolean = false;
+        if(preguntaM.tipoAlternativa===2){
+          var isNumber = Number(this.valorCuestionario[`pregunta ${ index+ 1}`].toString());
+          valorValido = isNumber.toString()!=='NaN';
+          console.log(`==> ${valorValido} - ${index+1}`);
+        }
+        else{
+          // for (let i = 0; i < preguntaM.alternativas.length ; i += 1){
+          //   const valor = this.valorCuestionario[`pregunta ${ index+ 1}`][`pregunta ${index + 1} - alternativa ${i + 1}`];
+  
+          //   if ( valor !== null && valor !== false ){
+          //     console.log(valor,index+1,i+1);
+          //     valorValido = valor;
+          //   }
+            
+          // }
+          valorValido = true;
+          console.log(`==> ${valorValido} - ${index+1}`);
+        }
+        this.preguntasValidas.push(valorValido);
+        index+=1;
+      }
+      console.log(this.valorCuestionario);
     }
 
   }
